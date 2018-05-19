@@ -1,0 +1,43 @@
+Temat: Dom aukcyjny
+
+restrykcje:
+od użytkownika - aukcje, oferty
+od aukcji - oferty
+od podkategorii - aukcje
+od ofert - transakcje
+
+TODO suffix zł
+
+----------------------------------------------------------------
+Opis zadania
+
+Jedną z podstaw zaliczenia laboratorium z przedmiotu Baz Danych jest wykonanie zadania indywidualnego –
+systemu bazodanowego zbudowanego w oparciu o rozwiązania MySQL i PHP.
+
+Rozwiązanie zadania powinno ściśle korelować z programem laboratorium, czyli zawierać m.in.:
+- dokumentację,
++ model EER (format pliku: MWB),
++ skrypt SQL tworzący strukturę bazy danych: definicje tabel i relacji (liczba tabel: 7..10),
++ skrypt SQL zasilający bazę w przykładowe dane,
++ skrypty CRUD,
++ zapytania SQL z podzapytaniami,
++ formularze do wstawiania, edycji i usuwania danych,
++ raporty dzienne, miesięczne i roczne,
++ prawidłową organizację plików.
+
+Dokumentacja projektu ma odzwierciedlać trzy fazy realizacji zadania;
+1. Analiza problemu.
+2. Projekt rozwiązania.
+3. Programowanie.
+
+Dokumentacja powinna zawierać:
+- opis problemu biznesowego,
+- założenia projektowe z uwzględnieniem:
+   - roli administratora bazy danych,
+   - roli pracownika firmy usługowej,
+   - roli klienta firmy usługowej,
+   - statusu realizacji usługi.
+- schemat bazy danych,
+- zakres funkcjonalności systemu,
+- opis działania systemu,
+- opis zarządzania systemem.
