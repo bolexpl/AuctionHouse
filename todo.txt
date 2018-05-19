@@ -6,8 +6,6 @@ od aukcji - oferty
 od podkategorii - aukcje
 od ofert - transakcje
 
-TODO suffix zł
-
 ----------------------------------------------------------------
 Opis zadania
 

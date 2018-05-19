@@ -52,7 +52,18 @@ try {
     $stmt->closeCursor();
 
     //łączna kwota
-    //TODO
+    $sql = "select sum(price) as 'price'
+from transactions t
+inner join offers o on t.offer_id = o.offer_id
+where {$typ}(t.date) = :arg";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':arg', $arg, PDO::PARAM_INT);
+    $stmt->execute();
+    $money = $stmt->fetch()['price'];
+    if($money == null){
+      $money = 0;
+    }
+    $stmt->closeCursor();
 
     //komentarze
     $sql = "select count(*) as 'count' from comments where {$typ}(date) = :arg";
@@ -132,7 +143,7 @@ require_once "parts/header.php";
 
     Wystawione aukcje: <?= $auctions ?><br>
     Zakończone aukcje: <?= $transactions ?><br>
-    Łączna kwota transakcji: <br>
+    Łączna kwota transakcji: <?= $money ?> zł<br>
     Wystawione komentarze: <?= $comments ?><br>
     Złożone oferty: <?= $offers ?><br>
 
