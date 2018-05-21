@@ -11,6 +11,7 @@ $id = htmlentities($_POST['id']);
 
 try {
 
+    //sprawdzenie aukcji
     $sql = "select count(*) as 'count'
             from auctions a
             inner join offers o on a.auction_id = o.auction_id
@@ -25,9 +26,21 @@ try {
         echo json_encode(['success' => false, 'error' => 'Nie można usunąć.']);
         exit();
     }
-
     $stmt->closeCursor();
 
+    //sprawdzenie admina
+    if ($_SESSION['is_admin'] == 1) {
+        $sql = "select count(*) as 'count' from users where is_admin = 1";
+        $stmt = $pdo->query($sql);
+        $count = $stmt->fetch()['count'];
+        if ($count < 2) {
+            echo json_encode(['success' => false, 'error' => 'Nie można usunąć.']);
+            exit();
+        }
+        $stmt->closeCursor();
+    }
+    
+    //usuwanie
     $sql = "delete from users where user_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);

@@ -26,8 +26,14 @@
 
     <ul class="navbar-nav ml-auto">
       <li class="mr-3">
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Szukaj" aria-label="Search">
+        <form class="form-inline" action="index.php">
+          <input class="form-control mr-sm-2" type="search"
+                 <?php
+                 if(isset($_GET['s'])){
+                   echo "value='{$_GET['s']}'";
+                 }
+                 ?>
+                 placeholder="Wszystkie kategorie" name="s" aria-label="Search">
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Szukaj</button>
         </form>
       </li>

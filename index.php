@@ -30,24 +30,46 @@ try {
     }
     $stmt->closeCursor();
 
-    //aukcje
-    if ($cat_id != 0) {
-        $sql = "select auction_id, description, title, date, completed, login 
+
+    //wyszukiwarka
+    if (isset($_GET['s'])) {
+        $s = $_GET['s'];
+
+        $sql = "select distinct a.auction_id, description, title, date, 
+completed, login
+from auctions a 
+  inner join users u on a.user_id = u.user_id
+  inner join products p on a.auction_id = p.auction_id
+where a.title like :t 
+or a.description like :d
+or p.name like :p";
+
+    } else {
+
+        //aukcje w kategoriach
+        if ($cat_id != 0) {
+            $sql = "select auction_id, description, title, date, completed, login 
 from auctions inner join users u on auctions.user_id = u.user_id 
 where subcategory_id = :id";
-        if ($show == 0) {
-            $sql .= " and completed = 0";
-        }
-    } else {
-        $sql = "select auction_id, description, title, date, completed, login 
+            if ($show == 0) {
+                $sql .= " and completed = 0";
+            }
+        } else {
+            $sql = "select auction_id, description, title, date, completed, login 
 from auctions inner join users u on auctions.user_id = u.user_id";
-        if ($show == 0) {
-            $sql .= " where completed = 0";
+            if ($show == 0) {
+                $sql .= " where completed = 0";
+            }
         }
+        $sql .= " order by date desc";
     }
-    $sql .= " order by date desc";
     $stmt = $pdo->prepare($sql);
-    if ($cat_id != 0) {
+
+    if (isset($s)) {
+        $stmt->bindValue(':t', '%' . $s . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':d', '%' . $s . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':p', '%' . $s . '%', PDO::PARAM_STR);
+    } else if ($cat_id != 0) {
         $stmt->bindValue(':id', $cat_id, PDO::PARAM_INT);
     }
     $stmt->execute();
@@ -85,7 +107,7 @@ require_once "parts/header.php";
           <button class="list-group-item list-group-item-action active">Wszystko</button>
         <?php } else { ?>
           <a href="?sub=0&show=<?= $show ?>" class="list-group-item list-group-item-action">Wszystko</a>
-        <?php
+            <?php
         }
         foreach ($cats as $cat) { ?>
           <div class="list-group-item"><?= $cat['nazwa'] ?>
@@ -101,7 +123,7 @@ require_once "parts/header.php";
                              class="list-group-item list-group-item-action">
                               <?= $sub['nazwa'] ?>
                           </a>
-                        <?php
+                            <?php
                         }
                     } ?>
                 </div>
