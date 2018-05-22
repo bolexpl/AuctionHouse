@@ -6,81 +6,22 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] == 0) {
     exit();
 }
 
-if (isset($_GET['time'])) {
-    $time = $_GET['time'];
-} else {
-    $time = 'current';
-}
-
 if (isset($_GET['type'])) {
     $typ = $_GET['type'];
 } else {
     $typ = 'day';
 }
 
-
-if ($typ == 'day') {
-    $arg = date("d");
-} elseif ($typ == 'month') {
-    $arg = date("m");
-} elseif ($typ == 'year') {
-    $arg = date("Y");
-}
-
-if ($time == 'past') {
-    $arg--;
-}
-
 try {
-
-    //aukcje
-    $sql = "select count(*) as 'count' from auctions where {$typ}(date) = :arg";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':arg', $arg, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $auctions = $stmt->fetch()['count'];
-    $stmt->closeCursor();
-
-    //transakcje
-    $sql = "select count(*) as 'count' from transactions where {$typ}(date) = :arg";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':arg', $arg, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $transactions = $stmt->fetch()['count'];
-    $stmt->closeCursor();
-
-    //łączna kwota
-    $sql = "select sum(price) as 'price'
-from transactions t
-inner join offers o on t.offer_id = o.offer_id
-where {$typ}(t.date) = :arg";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':arg', $arg, PDO::PARAM_INT);
-    $stmt->execute();
-    $money = $stmt->fetch()['price'];
-    if($money == null){
-      $money = 0;
+    if ($typ == 'day') {
+        $sql = "select * from day_report";
+    } elseif ($typ == 'month') {
+        $sql = "select * from month_report";
+    } else {
+        $sql = "select * from year_report";
     }
-    $stmt->closeCursor();
-
-    //komentarze
-    $sql = "select count(*) as 'count' from comments where {$typ}(date) = :arg";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':arg', $arg, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $comments = $stmt->fetch()['count'];
-    $stmt->closeCursor();
-
-    //oferty
-    $sql = "select count(*) as 'count' from offers where {$typ}(date) = :arg";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':arg', $arg, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $offers = $stmt->fetch()['count'];
+    $stmt = $pdo->query($sql);
+    $response = $stmt->fetchAll();
     $stmt->closeCursor();
 
 } catch (PDOException $e) {
@@ -101,18 +42,8 @@ require_once "parts/header.php";
 
 <div class="row">
   <div class="col-md-12">
+
       <?php
-
-      if ($time == 'current') { ?>
-        <a href="?type=<?= $typ ?>&time=past">
-          <button class="btn btn-secondary">Aktualny</button>
-        </a>
-      <?php } else { ?>
-        <a href="?type=<?= $typ ?>&time=current">
-          <button class="btn btn-secondary">Poprzedni</button>
-        </a>
-      <?php }
-
       if ($typ != 'day') { ?>
         <a href="?type=day">
           <button class="btn btn-primary">Dzień</button>
@@ -141,11 +72,11 @@ require_once "parts/header.php";
         }
         ?>:</h3>
 
-    Wystawione aukcje: <?= $auctions ?><br>
-    Zakończone aukcje: <?= $transactions ?><br>
-    Łączna kwota transakcji: <?= $money ?> zł<br>
-    Wystawione komentarze: <?= $comments ?><br>
-    Złożone oferty: <?= $offers ?><br>
+    Wystawione aukcje: <?= $response[0]['count'] ?><br>
+    Zakończone aukcje: <?= $response[1]['count'] ?><br>
+    Łączna kwota transakcji: <?= $response[2]['count'] == null ? '0' : $response[2]['count'] ?> zł<br>
+    Wystawione komentarze: <?= $response[3]['count'] ?><br>
+    Złożone oferty: <?= $response[4]['count'] ?><br>
 
   </div>
 </div>

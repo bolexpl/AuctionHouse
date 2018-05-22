@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `auctions`.`auctions` (
   COLLATE 'utf8_polish_ci' NULL     DEFAULT NULL,
   `subcategory_id` INT(11) NOT NULL,
   `date`           TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
-  `completed`         TINYINT          DEFAULT 0,
+  `completed`      TINYINT          DEFAULT 0,
   PRIMARY KEY (`auction_id`, `user_id`, `subcategory_id`),
   INDEX `fk_aukcje_users1_idx` (`user_id` ASC),
   INDEX `fk_auctions_subcategories1_idx` (`subcategory_id` ASC),
@@ -193,6 +193,78 @@ CREATE TABLE IF NOT EXISTS `auctions`.`transactions` (
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8
   COLLATE = utf8_polish_ci;
+
+-- -----------------------------------------------------
+-- Tworzenie widoków dla raportów
+-- -----------------------------------------------------
+
+create view day_report as
+  select count(*) as 'count'
+  from auctions
+  where day(date) = day(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from transactions
+  where day(date) = day(current_timestamp)
+  union ALL
+  select sum(price) as 'count'
+  from transactions t
+    inner join offers o on t.offer_id = o.offer_id
+  where day(t.date) = day(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from comments
+  where day(date) = day(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from offers
+  where day(date) = day(current_timestamp);
+
+
+create view month_report as
+  select count(*) as 'count'
+  from auctions
+  where month(date) = month(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from transactions
+  where month(date) = month(current_timestamp)
+  union ALL
+  select sum(price) as 'count'
+  from transactions t
+    inner join offers o on t.offer_id = o.offer_id
+  where month(t.date) = month(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from comments
+  where month(date) = month(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from offers
+  where month(date) = month(current_timestamp);
+
+
+create view year_report as
+  select count(*) as 'count'
+  from auctions
+  where year(date) = year(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from transactions
+  where year(date) = year(current_timestamp)
+  union ALL
+  select sum(price) as 'count'
+  from transactions t
+    inner join offers o on t.offer_id = o.offer_id
+  where year(t.date) = year(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from comments
+  where year(date) = year(current_timestamp)
+  union ALL
+  select count(*) as 'count'
+  from offers
+  where year(date) = year(current_timestamp);
 
 
 SET SQL_MODE = @OLD_SQL_MODE;
