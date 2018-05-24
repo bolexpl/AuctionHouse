@@ -203,20 +203,20 @@ create view day_report as
   from auctions
   where day(date) = day(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from transactions
   where day(date) = day(current_timestamp)
   union ALL
-  select sum(price) as 'count'
+  select sum(price)
   from transactions t
     inner join offers o on t.offer_id = o.offer_id
   where day(t.date) = day(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from comments
   where day(date) = day(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from offers
   where day(date) = day(current_timestamp);
 
@@ -226,20 +226,20 @@ create view month_report as
   from auctions
   where month(date) = month(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from transactions
   where month(date) = month(current_timestamp)
   union ALL
-  select sum(price) as 'count'
+  select sum(price)
   from transactions t
     inner join offers o on t.offer_id = o.offer_id
   where month(t.date) = month(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from comments
   where month(date) = month(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from offers
   where month(date) = month(current_timestamp);
 
@@ -249,20 +249,20 @@ create view year_report as
   from auctions
   where year(date) = year(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from transactions
   where year(date) = year(current_timestamp)
   union ALL
-  select sum(price) as 'count'
+  select sum(price)
   from transactions t
     inner join offers o on t.offer_id = o.offer_id
   where year(t.date) = year(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from comments
   where year(date) = year(current_timestamp)
   union ALL
-  select count(*) as 'count'
+  select count(*)
   from offers
   where year(date) = year(current_timestamp);
 

@@ -16,6 +16,10 @@ SET time_zone = "+00:00";
 -- Zrzut danych tabeli `users`
 --
 
+####################################################################################
+########### Na potrzeby testowych danych hasło jest takie samo jak login ###########
+####################################################################################
+
 INSERT INTO `users` (`login`, `password`, `is_admin`, `email`, `telephone`) VALUES
   ('admin', '$2y$10$JMcCMss7RIX7br.62H1KQeSVsbkbZgKyAJ4zzphHU2e/cifthPFtu', 1, 'admin@ad.min', 'admin'),
   ('test', '$2y$10$iduJz76LVMKypPO75tfSeuKrLBtqwN7f/bdtqwfLVgyJOmRGNgzbS', 0, 'test@te.st', '984094123141'),

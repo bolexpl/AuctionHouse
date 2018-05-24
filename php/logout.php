@@ -6,8 +6,7 @@ if(!isset($_SESSION['user_id'])){
         'error=Błąd%20bazy%20danych.');
 }
 
-unset($_SESSION['user_id']);
-unset($_SESSION['login']);
-unset($_SESSION['is_admin']);
+session_destroy();
+
 header('Location: ../index.php?' .
     'success=Wylogowano.');
