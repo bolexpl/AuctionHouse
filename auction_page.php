@@ -59,7 +59,8 @@ require_once "parts/header.php";
         ?>
     </h2>
 
-    <h6 class="text-muted">Sprzedający: <a href="user_profile.php?id=<?=$auction['user_id']?>"><?= $auction['login'] ?></a></h6>
+    <h6 class="text-muted">Sprzedający: <a
+              href="user_profile.php?id=<?= $auction['user_id'] ?>"><?= $auction['login'] ?></a></h6>
     <h6 class="text-muted">Data dodania: <?= $auction['date'] ?></h6>
     <h6 class="text-muted">
       Status: <span class="badge badge-<?= $auction['completed'] == 0 ? 'success' : 'danger' ?>">
@@ -78,7 +79,12 @@ require_once "parts/header.php";
   <div class="col-md-8">
       <?php
       if (count($products) == 0) {
-          echo "<h3>Brak produktów</h3>";
+          ?>
+        <h3>Brak produktów</h3>
+
+      <a href="manage_products.php?id=<?= $auction['auction_id'] ?>">
+          <button class="btn btn-primary">Edytuj</button>
+        </a><?php
       } else {
           ?>
         <h2>Produkty
