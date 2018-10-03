@@ -1,0 +1,1 @@
+# Dom aukcyjny - projekt zaliczeniowy
